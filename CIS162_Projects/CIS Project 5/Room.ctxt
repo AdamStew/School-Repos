@@ -1,0 +1,26 @@
+#BlueJ class context
+comment0.params=pDesc
+comment0.target=Room(java.lang.String)
+comment1.params=pDesc\ pItem
+comment1.target=Room(java.lang.String,\ Item)
+comment10.params=
+comment10.target=Item\ removeItem()
+comment11.params=
+comment11.target=java.lang.String\ getLongDescription()
+comment2.params=pDesc
+comment2.target=void\ setDesc(java.lang.String)
+comment3.params=
+comment3.target=java.lang.String\ getDesc()
+comment4.params=pItem
+comment4.target=void\ setItem(Item)
+comment5.params=
+comment5.target=Item\ getItem()
+comment6.params=i
+comment6.target=void\ addItem(Item)
+comment7.params=
+comment7.target=boolean\ hasItem()
+comment8.params=pDirection\ r
+comment8.target=void\ addNeighbor(java.lang.String,\ Room)
+comment9.params=pDirection
+comment9.target=Room\ getNeighbor(java.lang.String)
+numComments=12

@@ -1,0 +1,30 @@
+1 LOSMATT  DFHMSD TYPE=MAP,		                                       X
+2                MODE=INOUT,                                             X
+3                TIOAPFX=YES,                                            X
+4    	           TERM=3270-2,                                            X
+5                LANG=COBOL,                                             X
+6                MAPATTS=(COLOR,HILIGHT),                                X
+7                DSATTS=(COLOR,HILIGHT),                                 X
+8                STORAGE=AUTO,                                           X
+9                CTRL=(FREEKB,FRSET)
+10 *
+11 LOSATT   DFHMDI SIZE=(24,80),                                          X
+12                LINE=1,                                                 X
+13                COLUMN=1
+14 *
+15 LSSTDII  DFHMDF POS=(1,01),                                            X
+16                LENGTH=04,                                              X
+17                COLOR=BLUE,                                             X
+18                INITIAL='MQCM',                                         X
+19                ATTRB=PROT
+20 *
+21          DFHMDF POS=(24,01),                                           X
+22                LENGTH=79,                                              X
+23                COLOR=BLUE,                                             X
+24                ATTRB=ASKIP
+25 *                                                                       
+26          XFHMSD TYPE=FINAL                                           
+27          END
+
+ERROR: Found illegal Op-Code. Line:  26 
+ERROR: Operand is in the wrong column. Line:  26 

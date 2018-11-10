@@ -1,0 +1,6 @@
+framework module Pods_AlarmClockAppUITests {
+  umbrella header "Pods-AlarmClockAppUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}

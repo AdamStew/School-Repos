@@ -1,0 +1,35 @@
+####################################
+# Test file for CIS 451 Project 2b #
+# Adam Stewart                     #
+# Josh Getter                      #
+####################################	
+
+addi $8, $8, 15
+add $9, $9, $8
+li $10, 16
+
+jal function #Testing jal.
+
+bne $8, $10, test #Works.
+
+anotherTest:    addi $11, $11, 3 #Won't reach.
+
+filler:    addi $14, $14, -7 #Won't reach.
+
+test:    addi $15, $15, 72 #Reaches.
+
+bne $8, $9, end #Won't work.
+
+addi $16, $16, 42 #Reaches
+
+end:    addi $17, $17, 24
+
+j trueEnding
+
+#FUNCTION
+function:    addi $12, $12, 1600
+addu $13, $13, $31 # Testing $ra.
+jr $31 # Testing jr .
+
+trueEnding:    addi $18, $18, 86
+

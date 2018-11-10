@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.params=pNum
+comment0.target=Num(int)
+comment1.params=pNum
+comment1.target=void\ setNum(int)
+comment2.params=
+comment2.target=int\ getNum()
+comment3.params=other
+comment3.target=boolean\ equals(Num)
+comment4.params=
+comment4.target=java.lang.String\ toSring()
+numComments=5

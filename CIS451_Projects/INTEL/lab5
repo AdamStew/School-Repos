@@ -1,0 +1,36 @@
+Adam Stewart
+Josh Getter
+Lab 5
+1.  Explain what each of the assembly language instructions in exampleIML-1b.s does and why.
+
+	pushq %rbp //setting up stack and frame pointer
+	movq %rsp, %rbp //setting up stack and frame pointer
+	subq $16, %rsp //setting up stack and frame pointer
+	movl $1324, -4(%rbp) //allocating the number 1324 in memory
+	movl $5657, -8(%rbp) //allocating the number 5657 in memory
+	movl $9876, -12(%rbp) //allocating the number 9876 in memory
+	movl $2221, -16(%rbp) //allocating the number 2221 in memory
+	movl -8(%rbp), %eax //putting our value of 5657 into register %eax
+	movl -4(%rbp), %edx //putting our value of 1324 into register %edx
+	subl %eax, %edx //subtract 1324 by 5657 and put it in register %edx
+	movl %edx, %eax //putting the value -4333 into register %eax
+	movl %eax, -12(%rbp) //overwrites our value in memory 9876 with -4333
+	movl -12(%rbp), %ecx //putting our value of -4333 into register %ecx
+	movl -8(%rbp), %edx //putting our value of 5657 into register %edx
+	movl -4(%rbp), %eax //putting our value of 1324 into register %eax
+	movl %eax, %esi //putting our value of 1324 into register %esi
+	movl $.LCO, %edi //putting our output string into register %edi
+	movl $0, %eax //putting the value 0 into register %eax
+	call printf //calling the print function
+	movl %eax, -16(%rbp) //overwites our value in memory 2221 with 0
+	movl -12(%rbp), %eax //putting the value of -4333 into register %eax
+
+	Basically, it puts the value we're subtracting into register, then subtracts those registers, and overwrites the value for 'difference' in memory.  It then puts the three variables that are passed as parameters in registers (which were taken from memory).  It also puts the string into a register, calls the printf function, and then overwrites the printf_answer variable with 0.  Lastly it puts our answer into a register to be returned.
+
+2.  Using Table 2-2, identify the addressing mode that corresponds to each of the four possible values of Mod.
+
+	Mod 00: Register Addressing Mode
+	Mod 01: Memory Addressing Mode
+	Mod 10: Memory Addressing Mode
+	Mod 11: Register Addressing Mode
+

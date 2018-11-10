@@ -1,0 +1,8 @@
+#BlueJ class context
+comment0.params=title
+comment0.target=ProgramGUI(java.lang.String)
+comment0.text=\r\n\ Constructor\ for\ an\ Program\ GUI\r\n\ \r\n\ @param\ \ title\ \ \ a\ string\ to\ define\ the\ title\ of\ this\ JFrame.\r\n
+comment1.params=
+comment1.target=void\ main()
+comment1.text=\r\n\ main\ is\ the\ program\ point\ of\ entry;\ execution\ starts\ here.\r\n
+numComments=2

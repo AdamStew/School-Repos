@@ -1,0 +1,75 @@
+1 2BCDMS1  DFHMSD TYPE=MAP,                                              X
+2                LANG=COBOL,                                             X
+3                MODE=INOUT,                                             X
+4                TIOAPFX=YES,                                            X
+5                TERM=3270-2,                                            X
+6                MAPATTS=(COLOR,HILIGHT),                                X
+7                STORAGE=AUTO,                                           X
+8                CTRL=FREEKB
+9 ***************************************************************
+10   Only one Map in MapSet
+11 ***************************************************************
+12 MAPABC12 DFHMDI SIZE=(24,80),                                          X
+13                LINE=1,                                                 X
+14                COLUMN=1
+15 ***************************************************************
+16 *  Defining individual Fields
+17 *  First field is a constant
+18 ***************************************************************
+19         DFHMDF POS=(10,10),                                            X
+20                LENGTH=08,                                              X
+21                INITIAL='ABC INC.',                                     X
+22                ATTRB=(BRT,PROT)
+23 ***************************************************************
+24 &  MESSAGE CONSTANT                                        
+25 ***************************************************************
+26          DFHMDFFPOS=(22,10),                                           X
+27                LENGTH=8,                                               X
+28                  COLOR=BLUE,                                           X
+29                ATTRB=(BRT,PROT)                                        X
+30                  INITIAL='MESSAGE:'
+31 ***************************************************************
+32 *  MESSAGE VARIABLE
+33 ***************************************************************
+34 mESSAGE  DFHMDF POS=(22,19),                                           X
+35                LENGTH=50,                                              X
+36                ATTRB=PROT
+37 ***************************************************************
+38 *  NOMFAIL USED TO PREVENT MAPFAILS BY INSURING THAT AT LEAST
+39 *   ONE BYTE OF DATA IS ALWAYS PASSED BETWEEN MAP AND PROGRAM
+40 *   THAT CALLS IT
+41 ***************************************************************
+42 NOMFAIL  DFHMFD POS=(23,79),                                           X
+43              LENGTH=1,                                                 X
+44              ATTRB=(DRK,PROT,FSET),                                    X
+45              INITIAL=' '
+46 ***************************************************************
+47 * INDICATES END OF MAPSET
+48 ***************************************************************
+49          DFHMSD TYPE=FINAL                                           
+50          END
+
+ERROR: Invalid first character. Line:  1 
+ERROR: Invalid first character. Line:  24 
+ERROR: Invalid first character. Line:  34 
+ERROR: Label is too long. Line:  13 
+ERROR: Columns 8 and 9 are not blanks. Line:  10 
+ERROR: Columns 8 and 9 are not blanks. Line:  12 
+ERROR: Columns 8 and 9 are not blanks. Line:  19 
+ERROR: Columns 8 and 9 are not blanks. Line:  24 
+ERROR: Found illegal Op-Code. Line:  10 
+ERROR: Found illegal Op-Code. Line:  19 
+ERROR: Found illegal Op-Code. Line:  42 
+ERROR: Found illegal Op-Code. Line:  43 
+ERROR: Found illegal Op-Code. Line:  44 
+ERROR: Found illegal Op-Code. Line:  45 
+ERROR: Found an Op-Code on this line, however in the wrong column. Line:  19 
+ERROR: Operand is in the wrong column. Line:  10 
+ERROR: Operand is in the wrong column. Line:  19 
+ERROR: Operand is in the wrong column. Line:  24 
+ERROR: Operand is in the wrong column. Line:  28 
+ERROR: Operand is in the wrong column. Line:  30 
+ERROR: Operand is in the wrong column. Line:  42 
+ERROR: Operand is in the wrong column. Line:  43 
+ERROR: Operand is in the wrong column. Line:  44 
+ERROR: Operand is in the wrong column. Line:  45 

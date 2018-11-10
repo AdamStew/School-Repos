@@ -1,0 +1,27 @@
+LOSMATT  DFHMSD TYPE=MAP,                                              X
+               MODE=INOUT,                                             X
+               TIOAPFX=YES,                                            X
+               TERM=3270-2,                                            X
+               LANG=COBOL,                                             X
+               MAPATTS=(COLOR,HILIGHT),                                X
+               DSATTS=(COLOR,HILIGHT),                                 X
+               STORAGE=AUTO,                                           X
+               CTRL=(FREEKB,FRSET)
+*
+LOSATT   DFHMDI SIZE=(24,80),                                          X
+               LINE=1,                                                 X
+               COLUMN=1
+*
+LSSTDII  DFHMDF POS=(1,01),                                            X
+               LENGTH=04,                                              X
+               COLOR=BLUE,                                             X
+               INITIAL='MQCM',                                         X
+               ATTRB=PROT
+*
+         DFHMDF POS=(24,01),                                           X
+               LENGTH=79,                                              X
+               COLOR=BLUE,                                             X
+               ATTRB=ASKIP
+*                                                                       
+         DFHMSD TYPE=FINAL                                           
+         END

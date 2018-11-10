@@ -1,0 +1,26 @@
+####################################
+# Test file for CIS 451 Project 2b #
+# Adam Stewart                     #
+# Josh Getter                      #
+####################################	
+
+	addi $8, $8, 65536
+	addi $9, $9, 65536
+
+TOP:	addi $10, $10, 3
+	beq $8, $9, BOT # will be equal
+
+MIDDLEA:	add $11, $8, $9 # never reach
+
+MIDDLEB:	addi $12, $8, 5
+	beq $8, 65537, MIDDLED # won't be equal
+	j REALBOT
+
+MIDDLEC:	addi $13, $8, 7 # never reach
+
+MIDDLED:	addi $16, $8, 24 # never reach
+
+BOT:	addi $14, $8, 10
+	j MIDDLEB
+
+REALBOT: addi $15, $8, 12

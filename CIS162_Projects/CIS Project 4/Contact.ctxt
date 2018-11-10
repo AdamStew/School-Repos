@@ -1,0 +1,24 @@
+#BlueJ class context
+comment0.params=contact
+comment0.target=Contact(Contact)
+comment0.text=\r\n\ Constructor\ for\ a\ Contact.\ Calls\ the\ set\ method,\ which\ checks\ for\ a\ null\ reference.\r\n\ \r\n\ @param\ \ contact\ \ \ a\ reference\ to\ an\ existing\ Contact,\ or\ possibly\ a\ null\ reference.\r\n
+comment1.params=contact
+comment1.target=void\ set(Contact)
+comment1.text=\r\n\ Appropriately\ sets\ the\ name\ and\ number\ fields\ from\ the\ contact\ object,\r\n\ allowing\ for\ the\ possibility\ that\ the\ contact\ parameter\ is\ null.\r\n\ \r\n\ @param\ \ contact\ \ \r\n
+comment2.params=
+comment2.target=java.lang.String\ getName()
+comment3.params=
+comment3.target=java.lang.String\ getNumber()
+comment4.params=pName
+comment4.target=void\ setName(java.lang.String)
+comment5.params=pNumber
+comment5.target=void\ setNumber(java.lang.String)
+comment6.params=
+comment6.target=java.lang.String\ toString()
+comment7.params=fileReader
+comment7.target=void\ readFile(java.util.Scanner)
+comment7.text=\r\n\ reads\ and\ extracts\ text\ to\ define\ the\ name\ and\ number\ of\ this\ Contact\ instance.\r\n\ \r\n\ @param\ \ fileReader\ \r\n
+comment8.params=writer
+comment8.target=void\ writeFile(java.io.FileWriter)
+comment8.text=\r\n\ writes\ text\ for\ this\ Contact\ instance\ to\ file.\r\n\ \r\n\ @param\ \ writer\ \r\n
+numComments=9

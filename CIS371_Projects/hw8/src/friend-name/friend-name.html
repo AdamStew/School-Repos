@@ -1,0 +1,75 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../redux-mixin.html">
+
+<dom-module id="friend-name">
+    <template>
+
+        <firebase-app
+                id="myFireApp"
+                auth-domain="cis371-homework5-de073.firebaseapp.com"
+                database-url="https://cis371-homework5-de073.firebaseio.com"
+                api-key="AIzaSyA832vda45skJ5cOECGmT3E3aTSsN4J4DE"
+                storage-bucket="cis371-homework5-de073.appspot.com"
+                messaging-sender-id="379830463942">
+        </firebase-app>
+        <firebase-query path="/friend" data="{{qryData}}"></firebase-query>
+
+        <iron-list items="[[qryData]]" as="qry" selected-item="{{selectedName}}" selection-enabled="true">
+            <template>
+                <div id="nameText" class="layout vertical">Name: [[qry.name]]</div>
+            </template>
+        </iron-list>
+
+        <style include="iron-flex iron-flex-alignment iron-flex-factors iron-flex-reverse"></style>
+        <style>
+            :host {
+                display: block;
+            }
+            iron-list {
+                width: 48vw;
+                background-color: lightgreen;
+                float: left;
+            }
+            #nameText {
+                padding: 2px;
+            }
+        </style>
+    </template>
+
+    <script>
+        /**
+        * @customElement
+        * @polymer
+        */
+        class FriendName extends ReduxMixin(Polymer.Element) {
+            static get is() { return 'friend-name'; }
+            static get properties() {
+                return {
+                    selectedName: {
+                        type: String,
+                        observer: "_friendSelected"
+                    }
+                };
+            }
+            static get actions() {
+                return {
+                    showData(age, phone) {
+                        return {type: 'SELECTED', payload: {age: age, phone: phone}};
+                    }
+                }
+            }
+            _friendSelected(friend) {
+                if(friend) {
+                    this.dispatch('showData', "Age: " + friend.age, "Phone Number: " + friend.phone);
+                }
+            }
+        }
+        window.customElements.define(FriendName.is, FriendName);
+    </script>
+</dom-module>

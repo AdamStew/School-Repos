@@ -1,0 +1,23 @@
+import java.io.*;
+import java.net.*;
+import java.nio.*;
+import java.nio.channels.*;
+
+class udpserver{
+	public static void main(String args[]){
+		try{
+			DatagramChannel dc = DatagramChannel.open();
+			dc.bind(new InetSocketAddress(2482));
+			while(true){
+				//SocketChannel sc = c.accept();
+				ByteBuffer buffer = ByteBuffer.allocate(4096);
+				SocketAddress clientaddr = dc.receive(buffer);
+				String message = new String(buffer.array());
+				System.out.println(message);
+				//dc.close();
+			}
+		}catch(IOException e){
+			System.out.println("Got an IO Exception");
+		}
+	}
+}

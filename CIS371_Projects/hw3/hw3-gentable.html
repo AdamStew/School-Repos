@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="http://www.cis.gvsu.edu/~dulimarh/CS371/hw3-style.css"/>
+    <script src="http://www.cis.gvsu.edu/~dulimarh/CS371/lorem-ipsum.js"></script>
+    <script src="http://www.cis.gvsu.edu/~dulimarh/CS371/hw3-verifier.js"></script>
+    <script src="hw3-functions.js"></script>
+    <title>Generated Table</title>
+</head>
+<body>
+<div id="result" class="fail">
+    <div class="hidden">Success</div>
+    <div class="shown">Fail</div>
+</div>
+
+<h2>Content Generation</h2>
+<p>Below this paragraph you will file a &lt;div&gt; with two custom attributes
+    <code>data-gv-row</code> and <code>data-gv-column</code>.</p>
+
+<pre>
+  &lt;div data-gv-row="M" data-gv-column="N" /&gt;
+</pre>
+
+where M and N are integers.
+
+<p>Your JavaScript function shall generate a table of M rows and N columns.
+    The table must be created as a child node of the &lt;div&gt;.</p>
+
+<!-- custom attributes in HTML5 must have "data-" prefix -->
+<div class="table-home" data-gv-row="10" data-gv-column="4"/>
+<script>
+    window.onload = () => {
+        var M = Math.floor(Math.random() * 25) + 1;
+        var N = Math.floor(Math.random() * 10) + 1;
+        var tabHome = document.querySelector("div.table-home");
+        tabHome.setAttribute("data-gv-row", M.toString());
+        tabHome.setAttribute("data-gv-column", N.toString());
+        createTable();
+        verifyTable(M, N);
+    };
+</script>
+</body>
+</html>

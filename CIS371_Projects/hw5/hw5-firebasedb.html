@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Firebase Example</title>
+</head>
+<body>
+
+    <div id="tableData"></div>
+    <br>
+    <input id="upload" type="file">
+    <button onclick="processUpload()">Upload</button>
+    <p id="numAdded"></p>
+    <form name="insertForm" action="javascript:insertData()">
+        Full Name:
+        <input type="text" name="name" pattern="([A-Z]{1}[a-z]* ?)+" title="Name with proper capitlization.">
+        <br>
+        Phone Number:
+        <input type="text" name="phone" pattern="\d{7}|\d{10}" title="7 or 10 digit phone number.">
+        <br>
+        Age:
+        <input type="number" name="age" min="0" pattern="\d+" title="Enter valid number.">
+        <br>
+        <input type="submit" value="Submit" onClick="return empty()">
+    </form>
+    <br>
+    <form name="searchForm" action="javascript:searchName()">
+        Search:
+        <input type="text" name="name">
+        <br>
+        <input type="submit" value="Submit"">
+    </form>
+    <br>
+    <div id="searchData"></div>
+
+    <script src="https://www.gstatic.com/firebasejs/4.5.1/firebase.js"></script>
+    <script type="text/javascript">
+        // Initialize Firebase
+        var config = {
+            apiKey: "AIzaSyA832vda45skJ5cOECGmT3E3aTSsN4J4DE",
+            authDomain: "cis371-homework5-de073.firebaseapp.com",
+            databaseURL: "https://cis371-homework5-de073.firebaseio.com",
+            projectId: "cis371-homework5-de073",
+            storageBucket: "",
+            messagingSenderId: "379830463942"
+        };
+        firebase.initializeApp(config);
+
+        var body = document.getElementById("tableData"); //Get desired parent.
+        var tbl = document.createElement("table"); //Create table.
+        var tblBody = document.createElement("tbody"); //Create table body.
+        var row = document.createElement("tr"); //Create table row element.
+
+        //Prep table headers.
+        var head1 = document.createElement("th");
+        var head1Text = document.createTextNode("Name");
+        head1.appendChild(head1Text);
+        row.appendChild(head1);
+
+        var head2 = document.createElement("th");
+        var head2Text = document.createTextNode("Phone Number");
+        head2.appendChild(head2Text);
+        row.appendChild(head2);
+
+        var head3 = document.createElement("th");
+        var head3Text = document.createTextNode("Age");
+        head3.appendChild(head3Text);
+        row.appendChild(head3);
+
+        tblBody.appendChild(row);
+
+        //Get table data, if available.
+        var tabRef = firebase.database().ref().child('friend');
+        tabRef.on('child_added', function(snapshot) {
+            var row = document.createElement("tr"); //Create table row element.
+            for (var i = 0; i < 3; i++) { //(name, phone, age);
+                var cell = document.createElement("td"); //Create table data.
+                var cellText;
+                if(i==0)
+                    cellText = document.createTextNode(snapshot.val().name);
+                else if(i==1) {
+                    var formattedNum;
+                    if (snapshot.val().phone.length == 7) {
+                        formattedNum = snapshot.val().phone.substr(0, 3) + "-" + snapshot.val().phone.substr(3);
+                    } else if (snapshot.val().phone.length == 10) {
+                        formattedNum = "(" + snapshot.val().phone.substr(0, 3) + ") " +
+                            snapshot.val().phone.substr(3, 3) + "-" + snapshot.val().phone.substr(6);
+                    }
+                    cellText = document.createTextNode(formattedNum);
+                } else
+                    cellText = document.createTextNode(snapshot.val().age);
+
+                cell.appendChild(cellText); //Append text to cell.
+                row.appendChild(cell); //Append cell to row.
+            }
+            tblBody.appendChild(row); //Append each row to the table body.
+        });
+        tbl.appendChild(tblBody); //Append table body to the table.
+        body.appendChild(tbl);
+        tbl.setAttribute("border", "2"); //Some border.
+
+        //Search to see if a name contains certain characters.  If so, display table.
+        function searchName() {
+            var searchInput = document.forms['searchForm']['name'].value;
+
+            var rootRef = firebase.database().ref();
+            friendRef = rootRef.child('friend');
+
+            var body = document.getElementById("searchData"); //Get desired parent.
+            body.innerHTML = ""; //Reset table.
+            var tbl = document.createElement("table"); //Create table.
+            var tblBody = document.createElement("tbody"); //Create table body.
+            var row = document.createElement("tr"); //Create table row element.
+
+            //Prep table headers.
+            var head1 = document.createElement("th");
+            var head1Text = document.createTextNode("Name");
+            head1.appendChild(head1Text);
+            row.appendChild(head1);
+
+            var head2 = document.createElement("th");
+            var head2Text = document.createTextNode("Phone Number");
+            head2.appendChild(head2Text);
+            row.appendChild(head2);
+
+            var head3 = document.createElement("th");
+            var head3Text = document.createTextNode("Age");
+            head3.appendChild(head3Text);
+            row.appendChild(head3);
+
+            tblBody.appendChild(row);
+
+            var friendsQuery = friendRef.once("value").then(function(snapshot) { //Query.
+                snapshot.forEach(function(childSnapshot) {
+                    if(childSnapshot.val().name.toLowerCase().includes(searchInput.toLowerCase())) { //Check if contains.
+                        var row = document.createElement("tr"); //Create table row element.
+                        for (var i = 0; i < 3; i++) { //(name, phone, age);
+                            var cell = document.createElement("td"); //Create table data.
+                            var cellText;
+                            if(i==0)
+                                cellText = document.createTextNode(childSnapshot.val().name);
+                            else if(i==1) {
+                                var formattedNum;
+                                if (childSnapshot.val().phone.length == 7) {
+                                    formattedNum = childSnapshot.val().phone.substr(0, 3) + "-" +
+                                        childSnapshot.val().phone.substr(3);
+                                } else if (childSnapshot.val().phone.length == 10) {
+                                    formattedNum = "(" + childSnapshot.val().phone.substr(0, 3) + ") " +
+                                        childSnapshot.val().phone.substr(3, 3) + "-" +
+                                        childSnapshot.val().phone.substr(6);
+                                }
+                                cellText = document.createTextNode(formattedNum);
+                            } else
+                                cellText = document.createTextNode(childSnapshot.val().age);
+
+                            cell.appendChild(cellText); //Append text to cell.
+                            row.appendChild(cell); //Append cell to row.
+                        }
+                        tblBody.appendChild(row); //Append each row to the table body.
+                    }
+                });
+            });
+
+            tbl.appendChild(tblBody); //Append table body to the table.
+            body.appendChild(tbl);
+            tbl.setAttribute("border", "2"); //Some border.
+        }
+
+        //Insert data into Firebase Database.
+        function insertData() {
+            var x = document.forms['insertForm']['name'].value;
+            var y = document.forms['insertForm']['phone'].value;
+            var z = document.forms['insertForm']['age'].value;
+
+            var rootRef = firebase.database().ref();
+            friendRef = rootRef.child('friend');
+            friendRef.push().set({name: x, phone: y, age: z});
+        }
+
+        //Verify form fields aren't empty.
+        function empty() {
+            var x = document.forms['insertForm']['name'].value;
+            var y = document.forms['insertForm']['phone'].value;
+            var z = document.forms['insertForm']['age'].value;
+            if (x == "" || y == "" || z == "") {
+                alert("No field can be left blank.");
+                return false;
+            }
+        }
+
+        //Upload JSON file and add data to Firebase Databse.
+        function processUpload() {
+            document.getElementById("numAdded").textContent = ""; //Reset text.
+            var uploadInfo = document.getElementById("upload");
+            if ("files" in uploadInfo) {
+                var reader = new FileReader();
+                reader.onload = function(event) {
+                    var jsonObj = JSON.parse(event.target.result);
+                    /* put your code here, whatever you need to do with jsonObj */
+                    var rootRef = firebase.database().ref();
+                    friendRef = rootRef.child('friend');
+                    for(i in jsonObj) {
+                        friendRef.push().set({name: jsonObj[i].name, phone: jsonObj[i].phone, age: jsonObj[i].age});
+                    }
+                    document.getElementById("numAdded").textContent = "Successfully added " + jsonObj.length + " records.";
+                };
+
+                /* file is an array and we are interested only in the first element */
+                reader.readAsText(uploadInfo.files[0]);
+            }
+        }
+    </script>
+
+</body>
+</html>
+
+

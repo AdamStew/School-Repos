@@ -1,0 +1,14 @@
+﻿1. How many cycles does it take to fill the pipeline? (Notice that DLXview labels the cycles beginning with zero. To avoid ambiguity, fill in the blank: "In DLXview, the first cycle during which all the pipeline stages are busy is labeled __4__.") 
+
+2. How many cycles does it take for the computer to execute the first instruction completely? 
+The first instruction is completely finished after cycle 4.
+
+3. What pipeline stage is the instruction and r6, r7, r8 in during cycle number 5 (i.e., the cycle labeled 5)? 
+It's in the accessing memory stage (even though this particular function doesn't need to access memory).
+
+4. During which cycle does the the processor begin computing the instruction and r12, r13, r14? (Make sure your answer clearly states "the xth cycle" or "the cycle labeled x"). 
+It begins computing this instruction on the 4th cycle.
+
+5. During which cycle does the the processor finish computing the instruction and r12, r13, r14? (Make sure your answer clearly states "the xth cycle" or "the cycle labeled x"). 
+It is completely finished after the 8th cycle.
+6. 

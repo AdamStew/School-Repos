@@ -1,0 +1,78 @@
+Adam Stewart
+Josh Getter
+
+Lab 8
+
+1.  Save the plot to a file and include it in your lab writeup.
+
+See attached document.
+
+2.  What is the (approximate) slope of the line in your plot? (Find a line that matches reasonably well; you need not do a formal regression analysis.) Remember, these steps will save the plot to a file.
+
+A really rough estimate would be 4250/5000 which is about 0.85.
+
+3.  Write timingos.iso to a USB drive and run the experiment on one of the Macs in the Arch Lab. (These machines have an Intel i7 processor.) Note any differences between the last data points printed and your results from running ./timingos.debug. Is the slope the same? (It would be nice to be able to generate another plot, but I don't have that working yet.)
+
+The i5 had a slope of about 0.944 which is slower than the linux i7 which was 0.850, which means the i5 is running less instructions per cycle.
+
+4.  Run the experiment on a Mac and note any differences between the Linux box and the Mac. 
+
+The results differ in that the linux i7 ran about .150 more instructions per cycle than the i7.  i7 slope = 0.999 whereas the linux i7 slope = 0.850.  However the mac i7 was much closer to the i5 than the linux i7.
+
+5.  Run the experiment on the AMD box and note any differences between the i5, i7, and the AMD.
+
+Linux i7 slope = 0.850
+Mac i7 slope = 0.999
+i5 slope = 0.944
+AMD slope = 1.017
+
+This is the slowest one yet, it's running not even an entire instruction per cycle on average.
+
+6.  You will notice that the slope of the line for the i5 is less than 1. Explain how this is possible given the data dependency between each instruction. Hint: Read page 2-9 of Intel Software Develeloper's Manual (volume 1). 
+
+The dependency is still there however it states in the manual that basic integer operations can dispatch in 1/2 processor clock tick, meaning that adds are always ready after one clock cycle.
+
+7.  Run ./timingos.debug | grep -v cur > opt.2 and plot the results.
+
+See attached document.
+
+8.  What is the slope of the line in the plot?
+
+This slope looks to be about 2250/5000 = 0.450.
+
+9.  Write timingos.iso to the USB drive, run the experiment on the Mac and AMD, and note any differences (including in the slope). 
+
+MAC i7 slope = 0.507
+i5 slope = 0.475
+AMD slope = 0.515
+Basically, everything ran about twice as fast as before.
+
+10.  The slopes of the line should be significantly less than 1. What does this tell you? 
+
+This tells us there a large amount (now twice more than before) of instructions are being perform per second.
+
+11.  The first set of experiments produces code that looks like this:
+
+		addl $1, %eax
+		addl $1, %eax
+		addl $1, %eax
+		addl $1, %eax
+		...
+		
+
+whereas the second set produces code that looks like this:
+
+		addl $1, %eax
+		addl $1, %ecx
+		addl $1, %eax
+		addl $1, %ecx
+		...
+
+Why can the CPU run the second example faster? 
+
+The second set can run much quicker due to there being less dependencies on the previous results.  The first set depended soley on %eax, whereas the second set depended on %eax and %ecx, but half as much.
+
+12.  Figure out how many add instructions each different CPU can do in parallel. Attach graphs demonstrating this. (In other words, show me how you figured it out.) In general, each plot should contain more than one line. WARNING: Make sure your timing code doesn't clobber %ebx, %esp or any other register that is still in use when your code reaches the first rdtsc. 
+
+We got it so that at most 3 add instructions ran in parallel.  Graphs are attached which distinctly show no increase in the number of instructions per cycle between running 3 adds or 4 adds.
+

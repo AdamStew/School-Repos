@@ -1,0 +1,210 @@
+import java.io.*;
+import java.net.*;
+import java.nio.*;
+import java.nio.channels.*;
+import java.util.*;
+
+class server{
+	public static void main(String args[]){
+		try{
+			int packetSize = 1024; //1kb
+			DatagramChannel dc = DatagramChannel.open();
+			Console cons = System.console();
+
+			//User-inputs and error checking.
+			while(true){
+				try{
+					String m = cons.readLine("Enter desired port number: ");		
+					int port = Integer.parseInt(m);
+					dc.bind(new InetSocketAddress(port));
+					break;
+				}catch(IOException | NumberFormatException e){
+					System.out.println("There was an error connecting to that port number.");
+				}
+			}
+
+			//Comes here after a valid port is set-up.
+			while(true){
+
+				//Receiving the desired file's name.
+				ByteBuffer inBuf = ByteBuffer.allocate(4096);
+				SocketAddress clientaddr = dc.receive(inBuf);
+				String fileName = new String(inBuf.array());
+				fileName = fileName.trim();
+				File sendFile = new File(fileName);
+	
+				if(sendFile.exists()){
+					int fileSize = (int)sendFile.length();
+					String numPackets = "";
+
+					//Send how many packets there are (if-stmt to avoid integer division).
+					if(fileSize%(packetSize-1) == 0){
+						numPackets = fileSize/packetSize + "";
+					}else{
+						numPackets = fileSize/packetSize + 1 + "";
+					}
+
+					ByteBuffer sizeBuf = ByteBuffer.wrap(numPackets.getBytes());
+					dc.send(sizeBuf, clientaddr);
+
+					//Now send the packets of the file.
+					ByteBuffer outBuf = ByteBuffer.allocate(packetSize);
+					FileChannel fc = FileChannel.open(sendFile.toPath());
+
+
+
+					//Setting up our array to keep track of our window.
+					boolean[] seqNumsAck = new boolean[10];
+					ByteBuffer[] seqNumBuf = new ByteBuffer[10];
+					for(int i=0; i<seqNumBuf.length; i++){
+						seqNumBuf[i] = null;
+					}
+
+					boolean broke = false;
+					Integer seqNum = 0;
+					int window = 0; //Keeps track to what window starts at.
+					int start = 0; //Keeps track of what new packets we need.
+					int end = 5; //Keeps track of when to stop getting new packets.
+					int index = 0;
+					int temp = 0;
+					int numP = Integer.parseInt(numPackets);
+					outBuf.allocate(packetSize);
+					outBuf.put(seqNum.byteValue()); //Writes the packet number to the start.
+
+					while(numP > 0){ 
+
+						//This will add any NEW packets that it needs to, to send.
+						while(start<end){
+							if(fc.read(outBuf) > 0){
+								outBuf.flip();
+								seqNumBuf[index] = outBuf.duplicate(); //Keeping the old buffers, incase of resend.
+
+								//Starting the next packet.
+								outBuf = ByteBuffer.allocate(packetSize);
+								index = (index+1)%10;
+								start++;
+
+								outBuf.clear();
+								outBuf.put(new byte[packetSize]); //wipe it clean
+								outBuf.clear();
+								seqNum = (seqNum+1)%10;
+								outBuf.put(seqNum.byteValue()); //Writes the packet number to the start
+							}else{
+								break;
+							}
+							
+						}
+						
+						//Sending the packets in the window.
+						for(int i=0; i<5; i++){
+							try{
+								dc.send(seqNumBuf[(window+i)%10], clientaddr);
+								System.out.println("Packet sent to client." + (window+i)%10);
+							}catch(NullPointerException e){
+
+							}
+						}
+
+						//Reset the array, for the next wave of acknowledgments.
+						for (int i=0; i<seqNumsAck.length; i++){
+							seqNumsAck[i] = false;
+						}
+
+						//Check what acknowledgements we got, times-out after 0.5 seconds.
+						Selector s = Selector.open();
+						dc.configureBlocking(false);
+						dc.register(s,SelectionKey.OP_READ);
+						while(true){
+							int time = s.select(500); //ms
+							if(time==0){
+								break;
+							}else{
+								Iterator i = s.selectedKeys().iterator();
+								while(i.hasNext()){
+									SelectionKey k = (SelectionKey)i.next();
+									DatagramChannel mychannel = (DatagramChannel)k.channel();
+									ByteBuffer ackBuf = ByteBuffer.allocate(500);
+									clientaddr = mychannel.receive(ackBuf);
+									String ackStr = new String(ackBuf.array()).trim();
+									int ackNum = Integer.parseInt(ackStr.charAt(3) + "");
+									seqNumsAck[ackNum] = true;
+									i.remove();
+								}
+							}
+						}
+						System.out.println(temp);
+						while(seqNumsAck[temp]){
+							window = (window+1)%10;
+							temp = (temp+1)%10;
+							numP--;
+							System.out.println("Window incremented: " + window);
+						}
+						
+
+/*
+						//Finds the new window spot.
+						for(int i=0; i<seqNumsAck.length; i++){
+							//Checks if it rolls-over.
+							if(seqNumsAck[9]){
+								//If 9 is true, then check if 0-4 are true.
+								if(seqNumsAck[i%2]){
+									window = i+1;
+								//However, if 9 is true, and 0 is not, then our window must be 0.
+								}else if(!seqNumsAck[0]){
+									window = 0;
+								}
+							}else{
+							//Otherwise, pick the highest true value +1.
+								if(seqNumsAck[i]){
+									window = i+1;
+								}
+							}
+						}
+*/
+
+						//Finds new start and end spots of the new packets to get.
+						if(seqNumBuf[window]==null){
+							start = window;
+							end = (start+5)%10;
+						}else if(seqNumBuf[(window+1)%10]==null){
+							start = (window+1)%10;
+							end = (start+4)%10;
+						}else if(seqNumBuf[(window+2)%10]==null){
+							start = (window+2)%10;
+							end = (start+3)%10;
+						}else if(seqNumBuf[(window+3)%10]==null){
+							start = (window+3)%10;
+							end = (start+2)%10;
+						}else if(seqNumBuf[(window+4)%10]==null){
+							start = (window+4)%10;
+							end = (start+1)%10;
+						}
+
+						index = start;
+						temp = start;
+						if(start > end){
+							end += 10;
+						}
+
+						//Gets rid of packets we don't need anymore.
+						for(int i=5; i<10; i++){
+							seqNumBuf[(window+i)%10] = null; 
+						}
+						
+						
+					}
+				}else{
+					try{
+						ByteBuffer outBuffer = ByteBuffer.wrap(new String("DNE").getBytes());
+						dc.send(outBuffer, clientaddr);
+						System.out.println("That file doesn't exist.");
+					}catch(NullPointerException e){
+						
+					}
+				}
+			}
+		}catch(IOException e){
+			System.out.println("Got an IO Exception");
+		}
+	}
+}

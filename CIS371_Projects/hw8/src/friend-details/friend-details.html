@@ -1,0 +1,74 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../redux-mixin.html">
+
+<dom-module id="friend-details">
+    <template>
+
+        <div id="details" class="layout vertical start">
+            <paper-card id="ageDetails">
+                [[friendDetails.age]]
+            </paper-card>
+            <paper-card id="phoneNumDetails">
+                [[friendDetails.phone]]
+            </paper-card>
+            <paper-button on-click="clearDetails">Clear</paper-button>
+        </div>
+
+        <style include="iron-flex iron-flex-alignment iron-flex-factors iron-flex-reverse"></style>
+        <style>
+            :host {
+                display: block;
+            }
+            #details {
+                float: right;
+                width: 48vw;
+            }
+            paper-card {
+                background-color: lightblue;
+                border-radius: 8px;
+                margin-bottom: 4px;
+            }
+            paper-button {
+                background-color: cornflowerblue;
+            }
+        </style>
+
+    </template>
+
+    <script>
+        /**
+         * @customElement
+         * @polymer
+         */
+        class FriendDetails extends ReduxMixin(Polymer.Element) {
+            static get is() { return 'friend-details'; }
+            static get properties() {
+                return {
+                    friendDetails: {
+                        type: String,
+                        statePath: 'details'
+                    }
+                };
+            }
+            static get actions() {
+                return {
+                    removeData() {
+                        return {type: 'DESELECTED', payload: {}};
+                    }
+                }
+            }
+            clearDetails() {
+                this.dispatch('removeData');
+            }
+        }
+        window.customElements.define(FriendDetails.is, FriendDetails);
+
+    </script>
+</dom-module>

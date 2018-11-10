@@ -1,0 +1,43 @@
+Adam Stewart
+Josh Getter
+
+Lab 7
+1.  Write the straightforward MIPS assembly language code that implements the code snippet. This means that you should write all the assembly for line 1 (including any necessary sw instructions) before writing the assembly for line 2. Your code should not explicitly list any stalls. There should be 11 machine instructions in your code, not including the noops and trap #0 used to flush the pipeline at the end of the program.
+
+lw r3, 4(r1) ;item1
+lw r4, 8(r1) ;item2
+add r6, r3, r4 ;item1 + item2
+sw 0(r1), r6 ;storing sum
+lw r5, 0(r2) ;tax
+add r7, r6, r5 ;sum + tax
+sw 12(r1), r7 ;storing total
+lw r8, 8(r2) ;item3
+lw r9, 12(r2) ;item4
+add r10, r9, r8 ;item3 + item4
+sw 4(r2), r10 ;storing sum2
+
+2.  How many cycles does it take the "dlxview" machine to "execute" the code that you have written (not including the trap #0 at the end)? (Start counting with cycle 0, and stop counting when the final sw instruction is in the "WB" state. Note that the total number of cycles is one more than the number DLXview gives to the last cycle.) 
+
+18 cycles.
+
+3.   Show the locations of the stalls and branch delays in your code from problem 1. 
+
+There's basically a stall everytime the user tries to use the data from a loadword, right after loading it (which is on the same cycle).
+
+4.   Pretend you are an optimizing compiler: Rearrange (not rewrite) the instruction sequence to eliminate the data hazards (and the subsequent stalls). 
+
+lw r3, 4(r1) ;item1
+lw r4, 8(r1) ;item2
+lw r5, 0(r2) ;tax (stalling)
+add r6, r3, r4 ;item1 + item2
+sw 0(r1), r6 ;storing sum
+lw r8, 8(r2) ;item3 (prepping it for later)
+lw r9, 12(r2) ;item4 (prepping it for later)
+add r7, r6, r5 ;sum + tax
+sw 12(r1), r7 ;storing total
+add r10, r9, r8 ;item3 + item4
+sw 4(r2), r10 ;storing sum2
+
+5.   How many cycles does your "optimized" code take to execute?
+
+15 cycles.

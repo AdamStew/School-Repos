@@ -1,0 +1,7 @@
+{
+  "name": "hw7-polymer",
+  "short_name": "hw7-polymer",
+  "description": "Introducting into using polymer.",
+  "start_url": "/",
+  "display": "standalone"
+}

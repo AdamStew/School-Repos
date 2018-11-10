@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Assignment</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <style>
+        #errmsg {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+<h2>Search Location</h2>
+<label for="address">Address:</label>
+<input id="address" type="textbox">
+
+<button type="button" onclick="getData()">Go!</button>
+
+<div id="coordinates">
+    Longitude: <span id="long"></span><br/>
+    Latitude: <span id="lat"></span>
+</div>
+
+<div id="errmsg">Show Error message here!</div>
+<br>
+<div id="tableNames"></div>
+
+<script>
+
+    const key = "AIzaSyAj8-g-pYwlTyhwRGHYDjs-Gh2nQpAX_X0";
+    const baseURL = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+
+    //Initially hide text divs.
+    $(document).ready(function(){
+        $('#coordinates').hide();
+        $('#errmsg').hide();
+    });
+    var json;
+
+    function createRequest(method, url) {
+        var xhr = new XMLHttpRequest();
+        if("withCredentials" in xhr) {  //Check which XMLHttpRequest they're using.
+            xhr.open(method, url, true);
+        } else if(typeof XDomainRequest != 'undefined') {  //IE or Edge.
+            xhr = new XDomainRequest();
+            xhr.open(method, url);
+        } else { //Else can't help them.
+            xhr = null;
+        }
+        return xhr;
+    }
+
+    function getData() {
+        $(document).ready(function() {
+            $('#coordinates').hide();
+            $('#errmsg').hide();
+
+            var address = $('#address').val();
+            var url = `${baseURL}/${encodeURI(address)}&key=${key}`;
+            var xhr = createRequest("GET", url);
+
+            if (!xhr) {
+                throw new Error("XMLHttpRequest not supported");
+            }
+            xhr.onload = function() {
+                $('#tableNames').html(""); //Clear old table.
+                json = JSON.parse(xhr.responseText);
+                if(json.status != 'OK' || typeof json.results[0].geometry.location.lat == 'undefined' ||
+                    typeof json.results[0].geometry.location.lng == 'undefined') {
+                    //Error handle stuff.
+                    var fmtStatus = json.status.replace("_", " ").toLowerCase() + "."; //Replace _ with space.
+                    $('#errmsg').html(fmtStatus.charAt(0).toUpperCase() + fmtStatus.slice(1));
+                    $('#errmsg').show();
+                } else {
+                    //Show results.
+                    $('#lat').html(json.results[0].geometry.location.lat + "&ordm");
+                    $('#long').html(json.results[0].geometry.location.lng + "&ordm");
+                    $('#coordinates').show();
+                    createTable();
+                }
+            };
+            xhr.onerror = function() {
+                console.log("There was an error!");
+            };
+            xhr.send();
+        });
+    }
+
+    function createTable() {
+        $(document).ready(function() {
+            var body = $('#tableNames');
+            var tbl = $('<table></table>');
+            var tblBody = $('<tbody></tbody>');
+            var row = $('<tr></tr>');
+
+            //Prep table headers.
+            var head1 = $('<th></th>').append(document.createTextNode("Short Name"));
+            row.append(head1);
+
+            var head2 = $('<th></th>').append(document.createTextNode("Long Name"));
+            row.append(head2);
+
+            tblBody.append(row);
+
+            for(i=0; i < json.results[0].address_components.length; i++) {
+                var row = $('<tr></tr>');
+                var tbldata1 = $('<td></td>').append(document
+                    .createTextNode(json.results[0].address_components[i].short_name));
+                row.append(tbldata1);
+
+                var tbldata2 = $('<td></td>').append(document
+                    .createTextNode(json.results[0].address_components[i].long_name));
+                row.append(tbldata2)
+                tblBody.append(row);
+            }
+            tbl.append(tblBody);
+            body.append(tbl);
+            tbl[0].setAttribute("border", "2"); //Some border.
+        });
+    }
+
+</script>
+</body>
+</html>

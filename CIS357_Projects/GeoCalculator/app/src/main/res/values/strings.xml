@@ -1,0 +1,14 @@
+<resources>
+    <string name="app_name">GeoCalculator</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string-array name="distanceUnits">
+        <item>Kilometers</item>
+        <item>Miles</item>
+    </string-array>
+    <string-array name="bearingUnits">
+        <item>Degrees</item>
+        <item>Mils</item>
+    </string-array>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+</resources>

@@ -1,0 +1,90 @@
+Adam Stewart
+Josh Getter
+
+Lab 10: Cache
+
+6.  Write a simple C program for which a 4-way associative cache has a significantly lower miss rate than a equally sized 2-way set associative cache. You may choose any cache size and block size you wish, but they must remain the same for the entire problem. Submit the source code, all cache parameters, and resulting hit rates. Hint: Write the simplest program you can that will produce a 100% miss rate for the 2-way cache.
+
+#define ARRAY_SIZE 16*1024
+#define NUM_LOOPS 1000000
+
+int main(){
+char array[ARRAY_SIZE];
+register int outer_loop;
+register int inner_loop;
+register int solution = 0;
+
+	for (outer_loop = 0; outer_loop < NUM_LOOPS; outer_loop++){
+	    solution += array[8];
+	    solution += array[520];
+	    solution += array[1032];
+	    solution += array[1544];
+	}
+	return solution;
+}
+
+Two Way: 64 lines, 8 byte blocks. — Miss Rate = 0.9995 
+Four Way: 32 lines, 8 byte blocks. — Miss Rate = 0.0004
+
+7.  Write a simple C program for which an associativity of 2 has a higher miss rate than a direct-mapped cache. You may choose any cache size and block size you wish, but they must remain the same for the entire problem. Submit the source code, all cache parameters, and resulting hit rates. As with the previous problem, start by writing a program that has a 100% miss rate for a 2-way cache.
+
+#define ARRAY_SIZE 16*1024
+#define NUM_LOOPS 1000000
+
+int main(){
+char array[ARRAY_SIZE];
+register int outer_loop;
+register int inner_loop;
+register int solution = 0;
+
+	for (outer_loop = 0; outer_loop < NUM_LOOPS; outer_loop++){
+    		solution += array[8];
+    		solution += array[512];
+   		 solution += array[1024];
+   		 solution += array[1536];
+	}
+	return solution;
+}
+
+Two Way: 64 lines, 8 byte blocks. — Miss Rate = 0.7497
+Direct Mapped: 128 lines, 8 byte blocks. — Miss Rate = 0.4999
+
+8.  Explain why your code above produces the miss rates observed (i.e., why your code has a higher miss rate on the two-way cache).
+
+Basically we’re using numbers where in the direct map cache, it’s hitting a spot at the top of the cache and mid-way in the cache.  However, in the two-way cache, since it’s split in half in length, and double thick, the spot in cache we used to hit mid way, now goes to the top.  So with these numbers on the 2-way cache are constantly getting overwritten at the top, whereas in the direct map cache, they’re splitting spots at the top and midway, therefore getting only overwritten half the time (50% miss rate).
+
+9.  Choose qsort (or another interesting program of your choice) and a cache size. Produce a graph showing miss rates as associativity ranges over 1, 2, 4, 8, 16, and fully associative. Your graph should have associativity on the x-axis, and miss-rate on the y-axis. It should also contain four lines: one for each block size. Be sure to clearly label your graph with the cache size. Your graph should have a form similar to Figure 5.30 in Patterson and Hennessey (4th edition, revised).
+
+See attached document.
+
+10.  Write a simple C program for which a random replacement policy results in a significantly lower miss rate than LRU. (Use an 8-way set associative cache with a size and block size of your choosing.) Submit the source code, all cache parameters, and resulting hit rates.
+
+#define ARRAY_SIZE 16*1024
+#define NUM_LOOPS 1000000
+
+int main(){
+char array[ARRAY_SIZE];
+register int outer_loop;
+register int inner_loop;
+register int solution = 0;
+
+	for (outer_loop = 0; outer_loop < NUM_LOOPS; outer_loop++){
+    		solution += array[0];
+    		solution += array[128];
+    		solution += array[256];
+    		solution += array[384];
+    		solution += array[512];
+    		solution += array[640];
+    		solution += array[768];
+    		solution += array[896];
+    		solution += array[1024];
+	}
+	return solution;
+}
+
+Eight Way: 16 lines, 8 byte blocks, least recently used. — Miss Rate = 0.9998 
+Eight Way: 16 lines, 8 byte blocks, random. — Miss Rate = 0.2224
+
+11.  Choose a cache size and block size. Plot the effects of associativity and replacement policy on qsort. Your graph should have associativity on the x-axis and miss rate on the y-axis. There should be three lines: one for each replacement policy.
+
+See attached document.

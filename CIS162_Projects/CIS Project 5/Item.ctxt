@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.params=pName\ pDesc\ pWeight
+comment0.target=Item(java.lang.String,\ java.lang.String,\ double)
+comment1.params=pName
+comment1.target=void\ setName(java.lang.String)
+comment2.params=
+comment2.target=java.lang.String\ getName()
+comment3.params=pDesc
+comment3.target=void\ setDesc(java.lang.String)
+comment4.params=
+comment4.target=java.lang.String\ getDesc()
+comment5.params=pWeight
+comment5.target=void\ setWeight(double)
+comment6.params=
+comment6.target=double\ getWeight()
+numComments=7

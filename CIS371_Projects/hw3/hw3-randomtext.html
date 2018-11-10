@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/html">
+<head lang="en">
+    <meta charset="UTF-8"/>
+    <title>Random Text</title>
+    <link rel="stylesheet" href="http://www.cis.gvsu.edu/~dulimarh/CS371/hw3-style.css"/>
+    <!-- lorem-ipsum.js: https://gist.github.com/rviscomi/1479649 -->
+    <script src="http://www.cis.gvsu.edu/~dulimarh/CS371/lorem-ipsum.js"></script>
+    <script src="http://www.cis.gvsu.edu/~dulimarh/CS371/hw3-verifier.js"></script>
+    <script src="hw3-functions.js"></script>
+</head>
+<body>
+<div id="result">
+    <div class="hidden">Success</div>
+    <div class="shown">Fail</div>
+</div>
+
+<h2>Random Text</h2>
+
+<p>The following text is randomly generated using
+    <a href="https://gist.github.com/rviscomi/1479649">Lorem-Ipsum.js</a>.
+    You will see a different text everytime the page loads.
+</p>
+
+<div id="randomText"></div>
+
+<script type="text/javascript">
+    window.onload = function () {
+        var tagNames = ["span", "i", "b", "code", "tt", "em", "ins", "q", "strong", "u"];
+        var lipsum = new LoremIpsum();
+        var div = document.getElementById("randomText");
+        var idCount = 0;
+        var words = lipsum.generate(500);
+        words.split(' ').forEach( (word, pos) => {
+            var whichTag = Math.floor(Math.random() * tagNames.length);
+        var el = document.createElement(tagNames[whichTag]);
+        el.innerHTML = word + " ";
+        if (Math.random() < 0.15) {
+            el.id = "id-" + pos;
+            idCount++;
+        }
+        div.appendChild(el);
+    });
+        verifyResult(idCount, findElementsWithId("randomText", 'highlight'));
+    }
+</script>
+
+</body>
+</html>

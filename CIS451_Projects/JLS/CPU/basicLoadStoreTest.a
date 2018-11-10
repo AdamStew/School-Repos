@@ -1,0 +1,50 @@
+####################################
+# Test file for CIS 451 Project 2b #
+# Adam Stewart                     #
+# Josh Getter                      #
+####################################	
+
+	.data
+val1:	1983
+val2:	2007
+val3:	-1
+val4:	-70000
+
+	.text
+
+	# Remember, this is a pseudo instruction!
+	lw $8, val1
+	lw $9, val2
+	lw $10, val3
+	lw $11, val4
+
+	addi $8, $8, 17
+	addi $12, $11, 70000
+
+	# store the value in val2 (remember, this is a pseduo instruction)
+	sw   $8, val2
+
+	# store the value in val4
+	sw   $10, val4
+
+	# store the value in val3
+	sw   $12, val3
+
+
+	# load the address of val2 into $14
+	la   $14, val2  
+
+	# load the address of val4 into $15
+	la   $15, val4
+
+	# load the address of val3 into $16
+	la   $16, val3
+
+	# store the value in the slot after val2
+	sw   $8, 4($14)
+
+	# store the value in a slot after val4
+	sw   $10, -8($16)
+
+	# store the value in a slot after val3
+	sw $12, 12($16)

@@ -1,0 +1,125 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../../bower_components/iron-list/iron-list.html">
+<link rel="import" href="../../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../../bower_components/iron-icons/iron-icons.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
+<link rel="import" href="../../bower_components/iron-flex-layout/iron-flex-layout.html">
+<link rel="import" href="../../bower_components/iron-overlay-behavior/iron-overlay-behavior.html">
+<link rel="import" href="../../bower_components/paper-card/paper-card.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/paper-dialog-behavior/paper-dialog-behavior.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animations.html">
+<link rel="import" href="../../bower_components/neon-animation/neon-animation-runner-behavior.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
+
+<dom-module id="my-main">
+  <template>
+      <firebase-app id="myFireApp" auth-domain="cis371-homework5-de073.firebaseapp.com" database-url="https://cis371-homework5-de073.firebaseio.com" api-key="AIzaSyA832vda45skJ5cOECGmT3E3aTSsN4J4DE" storage-bucket="cis371-homework5-de073.appspot.com" messaging-sender-id="379830463942">
+      </firebase-app>
+      <firebase-query path="/friend" data="{{qryData}}"></firebase-query>
+
+      <paper-button id="addBtn" on-click="openDia">Add Friend</paper-button>
+      <iron-list items="[[qryData]]" as="qry">
+          <template>
+              <div id="cards">
+                  <paper-card class="layout vertical" animated-shadow="true" elevation="1">
+                      <div class="card-content">
+                          <div class="layout horizontal">
+                              <div id="nameText" class="flex">Name: [[qry.name]]</div>
+                              <iron-icon class="card-actions" icon="close" on-click="removeFriend"></iron-icon>
+                          </div>
+                          <div>Age: [[qry.age]]</div>
+                          <div>Phone Number: [[qry.phone]]</div>
+                      </div>
+                  </paper-card>
+              </div>
+          </template>
+      </iron-list>
+
+      <div>
+          <paper-dialog id="newFriend" modal="" on-iron-overlay-closed="diaClosed">
+              <div class="inputs">
+                  <paper-input id="name" label="Name"></paper-input>
+                  <paper-input id="age" label="Age"></paper-input>
+                  <paper-input id="phone" label="Phone Number"></paper-input>
+              </div>
+              <div class="buttons">
+                  <paper-button dialog-dismiss="">Cancel</paper-button>
+                  <paper-button dialog-confirm="">Add</paper-button>
+              </div>
+          </paper-dialog>
+      </div>
+
+
+      <style include="iron-flex iron-flex-alignment iron-flex-factors iron-flex-reverse"></style>
+      <style>
+          :host {
+              display: block;
+          }
+          iron-list {
+              width: 60%vw;
+              height: 50%vh;
+          }
+          paper-card {
+              width: 100%;
+              background-color: lightgreen;
+              border-radius: 8px;
+          }
+          paper-button {
+              background-color: gold;
+              border-radius: 8px;
+          }
+          paper-dialog {
+              background-color: lightblue;
+          }
+          #cards {
+              padding: 2px;
+          }
+          #nameText {
+              font-size: 120%;
+          }
+      </style>
+  </template>
+
+  <script>
+      /**
+       * @customElement
+       * @polymer
+       */
+      class MyMain extends Polymer.Element {
+          static get is() { return 'my-main'; }
+          openDia() {
+              this.$.newFriend.open();
+          }
+          diaClosed() { // dialog close handler
+              if(this.$.newFriend.closingReason.confirmed) {
+                  var dbRef = this.$.myFireApp.app.database();
+                  dbRef.ref("friend").push().set({name: this.$.name.value, phone: this.$.phone.value, age: this.$.age.value});
+              }
+          }
+          removeFriend(ev) {
+              var dbRef = this.$.myFireApp.app.database().ref("friend");
+              dbRef.orderByChild("name").equalTo(ev.model.qry.name).on("child_added", function(snapshot) {
+                 if(snapshot.val().age == ev.model.qry.age && snapshot.val().phone == ev.model.qry.phone) {
+                     dbRef.child(snapshot.key).remove();
+                 }
+              });
+          }
+          static get properties() {
+              return {
+                  prop1: {
+                      type: String,
+                      value: 'my-main'
+                  }
+              };
+          }
+      }
+
+      window.customElements.define(MyMain.is, MyMain);
+  </script>
+</dom-module>

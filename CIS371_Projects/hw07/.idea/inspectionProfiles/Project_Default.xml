@@ -1,0 +1,25 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="myValues">
+        <value>
+          <list size="11">
+            <item index="0" class="java.lang.String" itemvalue="path" />
+            <item index="1" class="java.lang.String" itemvalue="data" />
+            <item index="2" class="java.lang.String" itemvalue="dialog-dismiss" />
+            <item index="3" class="java.lang.String" itemvalue="dialog-confirm" />
+            <item index="4" class="java.lang.String" itemvalue="on-iron-overlay-closed" />
+            <item index="5" class="java.lang.String" itemvalue="modal" />
+            <item index="6" class="java.lang.String" itemvalue="label" />
+            <item index="7" class="java.lang.String" itemvalue="on-click" />
+            <item index="8" class="java.lang.String" itemvalue="include" />
+            <item index="9" class="java.lang.String" itemvalue="entry-animation" />
+            <item index="10" class="java.lang.String" itemvalue="exit-animation" />
+          </list>
+        </value>
+      </option>
+      <option name="myCustomValuesEnabled" value="true" />
+    </inspection_tool>
+  </profile>
+</component>

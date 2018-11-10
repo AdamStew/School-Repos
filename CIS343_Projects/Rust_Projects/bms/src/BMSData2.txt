@@ -1,0 +1,50 @@
+2BCDMS1  DFHMSD TYPE=MAP,                                              X
+               LANG=COBOL,                                             X
+               MODE=INOUT,                                             X
+               TIOAPFX=YES,                                            X
+               TERM=3270-2,                                            X
+               MAPATTS=(COLOR,HILIGHT),                                X
+               STORAGE=AUTO,                                           X
+               CTRL=FREEKB
+***************************************************************
+  Only one Map in MapSet
+***************************************************************
+MAPABC12 DFHMDI SIZE=(24,80),                                          X
+               LINE=1,                                                 X
+               COLUMN=1
+***************************************************************
+*  Defining individual Fields
+*  First field is a constant
+***************************************************************
+        DFHMDF POS=(10,10),                                            X
+               LENGTH=08,                                              X
+               INITIAL='ABC INC.',                                     X
+               ATTRB=(BRT,PROT)
+***************************************************************
+&  MESSAGE CONSTANT                                        
+***************************************************************
+         DFHMDFFPOS=(22,10),                                           X
+               LENGTH=8,                                               X
+                 COLOR=BLUE,                                           X
+               ATTRB=(BRT,PROT)                                        X
+                 INITIAL='MESSAGE:'
+***************************************************************
+*  MESSAGE VARIABLE
+***************************************************************
+mESSAGE  DFHMDF POS=(22,19),                                           X
+               LENGTH=50,                                              X
+               ATTRB=PROT
+***************************************************************
+*  NOMFAIL USED TO PREVENT MAPFAILS BY INSURING THAT AT LEAST
+*   ONE BYTE OF DATA IS ALWAYS PASSED BETWEEN MAP AND PROGRAM
+*   THAT CALLS IT
+***************************************************************
+NOMFAIL  DFHMFD POS=(23,79),                                           X
+             LENGTH=1,                                                 X
+             ATTRB=(DRK,PROT,FSET),                                    X
+             INITIAL=' '
+***************************************************************
+* INDICATES END OF MAPSET
+***************************************************************
+         DFHMSD TYPE=FINAL                                           
+         END

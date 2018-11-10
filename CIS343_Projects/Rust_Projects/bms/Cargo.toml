@@ -1,0 +1,9 @@
+[package]
+name = "hand_solitaire"
+version = "0.1.0"
+authors = ["Adam Stewart <stewarad@mail.gvsu.edu>"]
+
+[dependencies]
+rand = "0.3.0"
+time = "0.1"
+chrono = "0.2.2"

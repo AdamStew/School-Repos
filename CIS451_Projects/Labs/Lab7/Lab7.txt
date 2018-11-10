@@ -1,0 +1,206 @@
+Adam Stewart
+Josh Getter
+
+Lab 7.
+
+1.  Write the straightforward MIPS assembly language code that implements the code snippet. This means that you should write all the assembly for line 1 (including any necessary sw instructions) before writing the assembly for line 2. Your code should not explicitly list any stalls. There should be 11 machine instructions in your code, not including the noops and trap #0 used to flush the pipeline at the end of the program.
+
+lw r3, 4(r1) ;item1
+lw r4, 8(r1) ;item2
+add r6, r3, r4 ;item1 + item2
+sw 0(r1), r6 ;storing sum
+lw r5, 0(r2) ;tax
+add r7, r6, r5 ;sum + tax
+sw 12(r1), r7 ;storing total
+lw r8, 8(r2) ;item3
+lw r9, 12(r2) ;item4
+add r10, r9, r8 ;item3 + item4
+sw 4(r2), r10 ;storing sum2
+
+2.  How many cycles does it take the "dlxview" machine to "execute" the code that you have written (not including the trap #0 at the end)? (Start counting with cycle 0, and stop counting when the final sw instruction is in the "WB" state. Note that the total number of cycles is one more than the number DLXview gives to the last cycle.) 
+
+18 cycles.
+
+3.   Show the locations of the stalls and branch delays in your code from problem 1. 
+
+There's basically a stall everytime the user tries to use the data from a loadword, right after loading it (which is on the same cycle).
+
+4.   Pretend you are an optimizing compiler: Rearrange (not rewrite) the instruction sequence to eliminate the data hazards (and the subsequent stalls). 
+
+lw r3, 4(r1) ;item1
+lw r4, 8(r1) ;item2
+lw r5, 0(r2) ;tax (stalling)
+add r6, r3, r4 ;item1 + item2
+sw 0(r1), r6 ;storing sum
+lw r8, 8(r2) ;item3 (prepping it for later)
+lw r9, 12(r2) ;item4 (prepping it for later)
+add r7, r6, r5 ;sum + tax
+sw 12(r1), r7 ;storing total
+add r10, r9, r8 ;item3 + item4
+sw 4(r2), r10 ;storing sum2
+
+5.   How many cycles does your "optimized" code take to execute?
+
+15 cycles.
+
+6.  Run exampleCO-1 through dlxview then Identify and explain all data and control hazards that result in "wasted" cycles. Look carefully, there is a data hazard you probably don't expect!
+
+The first hazard is that the user tries to add with a value that was just loaded, which requires a stall (or another instruction between it).  The second hazard is that when a branch is done with a value that is still being calculated.  It must stall until the value is ready.  Even then after that, the instruction following a branch is executed always, so there needs to be a nop executed by the programmer, incase it branches somewhere.
+
+7.  How many cycles does it take to complete the program in exampleCO-1.s when MAX is 4?
+
+It takes 54 cycles, with a max value of 4.
+
+8.  Now, state the number of cycles as a function of MAX.
+
+It takes 12 cycles for each loop, so in total, it’s 1 + 12*MAX + 6, since there’s 1 instruction before the loop, and 2 instructions after (plus 5 for the last instruction to reach the WB phase).
+
+9.  Re-arrange the code to eliminate any data hazards and branch delay slots.
+
+addi r4, r0, 4		; Set r4 (the loop counter) to MAX
+LOOP: lw r5, 0(r1)	; Load from a into r5
+lw r6, 0(r2)		; Load from b into r6
+addi r1, r1, 4		; increment pointers for arrays a, b, and c
+add r7, r5, r6		; r7 = r6 + r5
+sw  0(r3), r7		; store result back in array c
+subi r4, r4, 1		; decrement loop counter
+addi r2, r2, 4
+bnez r4, LOOP		; branch
+addi r3, r3, 4
+sw 0(r3), r0 		; set c[0] to 0. 
+nop;
+nop; 
+nop;
+nop;	
+trap #0;
+
+10.  How many cycles does it take to complete your optimized program when MAX = 4?
+It takes 42 cycles, with a max value of 4.
+
+11.  State the number of cycles of your re-arranged program as a function in terms of MAX. (Important: At this point, have the instructor double-check your answers to make sure you're on the right track.)
+
+It takes 9 cycles for each loop, so in total, it’s 1 + 9*MAX + 6, since there’s 1 instruction before the loop, and 2 instructions after (plus 5 for the last instruction to reach the WB phase).
+
+12.  What is the speedup of your optimized code when MAX = 4?
+
+For our formulas, we’d get 55 cycles for old, and 43 cycles for new, which gives us a speedup of 1.28.
+
+13.  Use your favorite plotting tool (I like gnuplot) to plot the speedup of your optimized code as a function of MAX. Attach the graph to your lab submission.
+
+See attached document.
+
+14.  As MAX gets large, the speedup approaches an upper bound. What is this bound?
+
+The upper bound is about 1.33 (rough estimate).
+
+15.  Assume that the value of MAX is known to be 4 at the time the program is compiled. "Unroll" the optimized loop from problem 9 and optimize the unrolled loop to use as few cycles as possible. Where possible, modify the offset of lw instructions in order to remove addi instructions. (Because MAX is known at compile time, you are effectively removing the loop. Your optimized code should have 17 instructions and no stalls.)
+
+add i r4, r0, 4
+lw r5, 0(r1)
+lw r6, 0(r2)
+lw r5, 4(r1)
+add r7, r5, r6
+sw 0(r3), r7
+lw r6, 4(r2)
+lw r6, 8(r2)
+add r7, r5, r6
+sw 4(r3), r7
+lw r5, 8(r1)
+lw r6, 12(r2)
+add r7, r5, r6
+lw r5, 12(r1)
+sw 8(r3), r7
+add r7, r5, r6
+sw 12(r3), r7
+sw 0(r3), r0 
+nop
+nop
+nop
+nop
+trap #0
+
+16.  How many cycles does your "unrolled" assembly take?
+It’ll take 21 cycles, since we wait 4 cycles for the last sw to get to the WB phase, so 4 + 17 = 21.
+
+17.  What is the speedup of this unrolled code over the optimized program from problem 9?
+
+The new speedup is 2.05, since it’s old time was 43 cycles, with a new time of 21 cycles.
+
+18.  The tradeoff of unrolling loops is that your source code grows in length. By what percentage did your source code grow when you unrolled the loop (as compared to the source code you wrote for problem 9)? Do not count the trailing nops and trap #0.
+
+It went from 11 lines of code to 17 lines of code.  So it grew by 64.7%.
+
+19.  Assume that the value of MAX is not known at compile time, but is known at run-time before the loop begins. Unroll the optimized loop from problem 9 so that each iteration of the unrolled loop performs the work of 4 original loops. (In other words, iteration 1 of the new loop computes c[0] through c[3]; iteration 2 computes c[4] through c[7], etc.) For simplicity, assume that MAX is a multiple of 4.
+
+addi r4, r0, 4		; Set r4 (the loop counter) to MAX
+LOOP: lw r5, 0(r1)
+lw r6, 0(r2)
+lw r5, 4(r1)
+add r7, r5, r6
+sw 0(r3), r7
+lw r6, 4(r2)
+lw r6, 8(r2)
+add r7, r5, r6
+sw 4(r3), r7
+lw r5, 8(r1)
+lw r6, 12(r2)
+add r7, r5, r6
+lw r5, 12(r1)
+sw 8(r3), r7
+add r7, r5, r6
+sw 12(r3), r7
+subi r4, r4, 4		; decrement loop counter
+addi r1, r1, 4	
+addi r2, r2, 4
+bnez r4, LOOP		; branch
+addi r3, r3, 4
+sw 0(r3), r0 
+nop;
+nop; 
+nop;
+nop;	
+trap #0;
+
+20.  How could you modify your code so that it could handle any value of MAX (as opposed to multiples of 4 only)?
+
+So we’d loop (still in groups of 4) until our max was no longer greater than or equal to 4 (instead of 0).  After this, we’d check to see if our max was greater than zero, if so loop individually (like the old not-unwrapped code), until the max=0.  
+
+21.  Write a function that describes the number of cycles taken by your optimized code (from problem 19) in terms of MAX. (Verify your answer with the instructor before continuing.)
+
+So the function will go by 21 cycles for every iteration of max greater than 4.  Then it would loop by cycles of 9 for every iteration where max is greater than 0.  In other words, the formula would be something like 21*(MAX/4) + 7 (the 7 is just constants done before and after the loop).
+
+22.  When MAX is large, what is the speedup of the unrolled version as compared to the optimized code from problem 9?
+
+So with MAX = 100, our old code will take 907 cycles, with our new code taking 532 cycles.  So our speedup is 1.70.  
+
+23.  How much bigger (in terms of percentage) is the unrolled source code than the version in problem 9?
+
+Our old code is 11 lines of code, and our new source code is 21 lines of code.  So it’s 52.4% larger now.
+
+24.  Write a function that describes the number of cycles taken by your unrolled loop in terms of both MAX, and I (the number of iterations per unrolled loop.) Your formula will consider three types of instructions: (1) Instructions that appear once per original iteration (e.g., the lw instructions), (2) instructions that appear once per unrolled iteration (e.g., the branch instruction), and (3) instructions that appear once per program (e.g., the final sw). You can test your formula by making sure that it reduces to your answer for Problem 21 when I = 4.
+
+(I*4)*(MAX/I) + 5*(MAX/I) + 7 since for every iteration there’s 4 instructions, which get ran through the loop MAX/I times (since we decrement by I), plus 5*(MAX/I) since that is how many times per loop we need to branch, subi, addi (3 times), plus 7 (stuff done once).
+
+25.  Write a function that describes the speedup of your unrolled loop (as compared to the optimized code in problem 9) in terms of both MAX, and I.
+
+(9*MAX + 7) / ((I*4)*(MAX/I) + 5*(MAX/I) + 7) (which simplifies to (9*MAX + 7) / ((4*MAX) + 5*(MAX/I) + 7)).
+
+26.  As MAX grows large, the effects of the constant terms (i.e., the "+6") become negligible. If you ignore these terms, MAX should cancel, leaving a formula in terms of I. What is it?
+
+(9*MAX)/(I*4*MAX/I + 5*(MAX/I)) reduces to 9/(4+(5/I))
+
+27.  What is the limit of this speedup as I grows? (Hint: There is a finite limit. If you think that the answer is "there is no limit", then you made a mistake somewhere.)
+
+The limit should be 9/4 since 5/I get’s closer and closer to being equal to zero.  So the max speedup is about 2.25.
+
+28.  Calculate the size of your unrolled loop as a function of I.
+
+4*I, since it’ll do the lw, lw, addi, sw for every iteration.
+
+29.  What is the limit of this function as I grows?
+
+There is no limit, theoretically.  Basically, it’ll run until your computer crashes or timeouts.
+
+30.  What would you consider the optimal number of iterations per unrolled loop? Why? (This is an opinion question. There isn't a right answer, you just have to say something thoughtful.)
+
+I would honestly do 4, since it’s easily divisible by a lot of numbers, and isn’t too big so that if you wanted to loop with small numbers, it would still work relatively well.

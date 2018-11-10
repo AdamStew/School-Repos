@@ -1,0 +1,28 @@
+####################################
+# Test file for CIS 451 Project 2b #
+# Adam Stewart                     #
+# Josh Getter                      #
+####################################	
+
+#More addi.
+addi $8, $8, 3        # $8 = 3
+addi $9, $8, -70000   # $9 = -70000
+addi $10, $10, 31368  # $10 = 31368
+addi $11, $11, -1     # $11 = -1
+addi $12, $12, -29000 # $12 = -29000
+addi $13, $13, 33000  # $13 = 33000
+
+#SLT Stuff.  Can't test with imm. values higher than 16 bits.
+slt $14, $8, $9       # 3 < -70000
+slti $15, $9, 7000    # -70000 < 7000
+slti $16, $8, -8383   # 3 < -8383
+slt $17, $11, $11     # -1 < -1
+sltu $18, $8, $13     # 3 < 33000
+sltiu $19, $13, 9999  # 33000 < 9999
+sltiu $20, $13, 7     # 33000 < 7
+sltu $21, $9, $13     # Not sure what it'll do, but should probs be 0.
+sltiu $22, $10, -8    # Not sure what it'll do again.
+sltiu $23, $10, 31368 # 31368 < 31368
+slt $24, $12, $9      # -29000 < -70000
+
+

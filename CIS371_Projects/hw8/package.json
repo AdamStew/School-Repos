@@ -1,0 +1,20 @@
+{
+  "name": "hw8",
+  "version": "1.0.0",
+  "description": "Redux",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "friends"
+  ],
+  "author": "Adam Stewart",
+  "license": "ISC",
+  "dependencies": {
+    "redux": "^3.7.2"
+  }
+}

@@ -1,0 +1,18 @@
+<!-- redux-mixin.html -->
+<link rel="import" href="bower_components/polymer-redux/polymer-redux.html">
+<script src="node_modules/redux/dist/redux.js"></script>
+<script>
+    const initialState = {details: {}};
+    const myReducer = (state = initialState, action) => {
+        switch(action.type) {
+            case 'SELECTED':
+                return Object.assign({}, state, {details: {phone: action.payload.phone, age: action.payload.age}});
+            case 'DESELECTED':
+                return Object.assign({}, state, {details: {}});
+            default:
+                return state; /* required !!! */
+        }
+    };
+    const store = Redux.createStore(myReducer);
+    ReduxMixin = PolymerRedux(store); // ReduxMixin has a GLOBAL scope
+</script>

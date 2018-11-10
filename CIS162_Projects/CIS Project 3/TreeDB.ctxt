@@ -1,0 +1,17 @@
+#BlueJ class context
+comment0.params=
+comment0.target=TreeDB()
+comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ TreelistOfTrees\r\n
+comment1.params=
+comment1.target=java.lang.String\ toString()
+comment2.params=key
+comment2.target=java.lang.String\ queryByName(java.lang.String)
+comment3.params=key
+comment3.target=java.lang.String\ queryByPossibleHeight(int)
+comment4.params=
+comment4.target=int\ getMaxHeight()
+comment5.params=
+comment5.target=int\ getMinHeight()
+comment6.params=
+comment6.target=double\ getAverageHeight()
+numComments=7

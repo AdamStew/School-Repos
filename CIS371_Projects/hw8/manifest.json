@@ -1,0 +1,7 @@
+{
+  "name": "hw8",
+  "short_name": "hw8",
+  "description": "Display all of my friends.",
+  "start_url": "/",
+  "display": "standalone"
+}

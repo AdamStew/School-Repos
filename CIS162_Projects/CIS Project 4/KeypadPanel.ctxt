@@ -1,0 +1,20 @@
+#BlueJ class context
+comment0.params=phoneNumberLabel
+comment0.target=KeypadPanel(javax.swing.JLabel)
+comment0.text=\r\n\ Constructor\ for\ a\ KeypadPanel.\r\n\ \r\n\ @param\ \ phoneNumberLabel\ \ \ a\ reference\ to\ the\ phoneNumberLabel\ displayed\ on\ the\ PhoneNumberDisplayPanel.\r\n
+comment1.params=text\ alignment\ fontName\ fontColor\ fontSize\ listener
+comment1.target=javax.swing.JButton\ createButton(java.lang.String,\ int,\ java.lang.String,\ java.awt.Color,\ int,\ java.awt.event.ActionListener)
+comment1.text=\r\n\ Creates\ a\ JButton\r\n\ \r\n\ @param\ text\ \ \ \ \ \ \ caption\ for\ the\ button\r\n\ @param\ alignment\ \ JButton.CENTER\ |\ JButton.LEFT\ |\ JButton.RIGHT\r\n\ @param\ fontName\ \ \ e.g.\ "Cambria"\r\n\ @param\ fontColor\ \ e.g.\ Color.BLACK\r\n\ @param\ fontSize\ \ \ e.g.\ 14\r\n\ @param\ listener\ \ \ e.g.\ this\r\n\ @return\ \ \ \ \ \ \ \ \ \ \ the\ created\ JButton\ \r\n
+comment2.params=
+comment2.target=void\ backspace()
+comment2.text=\r\n\ Removes\ the\ last\ character\ from\ the\ phoneNumberLabel.\r\n
+comment3.params=
+comment3.target=void\ clear()
+comment3.text=\r\n\ Sets\ the\ text\ for\ phoneNumberLabel\ to\ be\ the\ empty\ string,\ "".\r\n
+comment4.params=button
+comment4.target=void\ appendDigit(javax.swing.JButton)
+comment4.text=\r\n\ Appends\ a\ hyphen,\ "-",\ but\ only\ if\ the\ string\ length\ is\ 3\ or\ 7.\r\n\ Appends\ the\ text\ on\ the\ button\ to\ the\ phoneNumberLabel.\r\n\ \r\n\ @param\ button\ \ \r\n
+comment5.params=event
+comment5.target=void\ actionPerformed(java.awt.event.ActionEvent)
+comment5.text=\r\n\ Handles\ the\ pending\ event,\ whenever\ it\ is\ called.\r\n\ \r\n\ @param\ event\ \ \r\n
+numComments=6

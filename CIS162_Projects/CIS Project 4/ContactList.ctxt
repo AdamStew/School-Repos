@@ -1,0 +1,26 @@
+#BlueJ class context
+comment0.params=fileName\ window
+comment0.target=ContactList(java.lang.String,\ Window)
+comment0.text=\r\n\ Constructor\ for\ a\ ContactList,\ to\ initialize\ the\ list\ from\ file.\r\n\ \r\n\ @param\ \ fileName\ \ \ a\ reference\ to\ an\ existing\ file\r\n\ @param\ \ window\ \ \ \ \ a\ reference\ to\ an\ existing\ window\ to\ display\ the\ list\ contacts\r\n
+comment1.params=contact
+comment1.target=boolean\ found(Contact)
+comment1.text=\r\n\ Searches\ the\ list\ for\ a\ particular\ contact,\ \r\n\ comparing\ this\ name\ and\ number\ (in\ lower\ case)\ \r\n\ with\ the\ contact\ name\ and\ number\ (in\ lower\ case).\r\n\ \r\n\ @param\ \ \ contact\r\n\ @return\ \ returns\ true\ if\ the\ contact\ is\ found,\ otherwise\ false\r\n
+comment2.params=contact
+comment2.target=void\ add(Contact)
+comment2.text=\r\n\ Adds\ one\ contact\ to\ the\ list\r\n\ \r\n\ @param\ \ \ contact\r\n
+comment3.params=substring
+comment3.target=java.util.ArrayList\ searchByName(java.lang.String)
+comment3.text=\r\n\ searches\ the\ list\ for\ each\ name\ that\ contains\ the\ specified\ substring\r\n\ \r\n\ @param\ \ \ substring\r\n\ @return\ \ returns\ the\ result\ as\ an\ ArrayList\r\n
+comment4.params=number
+comment4.target=Contact\ searchByNumber(java.lang.String)
+comment4.text=\r\n\ searches\ the\ list\ for\ a\ contact\ that\ has\ the\ specified\ number\r\n\ \r\n\ Since\ phone\ numbers\ are\ not\ shared,\ a\ phone\ number\ can\ appear\ \r\n\ in\ the\ list\ at\ most\ once.\r\n\ \r\n\ @param\ \ \ substring\r\n\ @return\ \ returns\ the\ unique\ contact\ found,\ possibly\ null\r\n
+comment5.params=fileReader
+comment5.target=void\ readFile(java.util.Scanner)
+comment5.text=\r\n\ reads\ the\ text\ file\ and\ adds\ each\ entry\ as\ a\ contact\ to\ the\ list\ of\ contacts\r\n\ \r\n\ @param\ \ fileReader\ \r\n
+comment6.params=writer
+comment6.target=void\ writeFile(java.io.FileWriter)
+comment6.text=\r\n\ writes\ the\ entire\ list\ of\ contacts\ as\ text\ to\ the\ specified\ file.\r\n\ \r\n\ @param\ \ writer\ \r\n
+comment7.params=
+comment7.target=java.lang.String\ toString()
+comment7.text=\r\n\ returns\ the\ entire\ list\ as\ a\ string\r\n\ \r\n\ @return\ \ the\ list\ as\ a\ string\r\n
+numComments=8

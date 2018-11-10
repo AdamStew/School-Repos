@@ -1,0 +1,46 @@
+Adam Stewart
+Josh Getter
+
+Lab 9: Cache
+
+1.   After you have run sim-cache for each block size, grep each output file (output_8, output_16, etc.) for the line "dl1.miss_rate". List the miss rate for each block size tested.
+
+The miss rates are 0.1257 for blocks of 8 bytes, 0.0629 for blocks of 16 bytes, 0.0314 for blocks of 32 bytes, and 0.0158 for blocks of 64 bytes.
+
+2.  Based on your observations, determine a formula for the miss rate in terms of block_size.
+
+miss_rate = 1.0/block_size
+
+3.  Explain your results (i.e., what is happening in the cache during each memory access to produce the results you observed).
+
+Basically our first load is a miss, since it isn't ready in the cache, however the next block_size-1 loads are hits, since they're already in the cache from the previous retrieval.  
+
+4.  Now, write a C program for which the miss rate is considerably higher for a 16 byte block than for an 8 byte block. (The easiest way to do this is to find two array locations that conflict with a 16-byte block, but not with an 8-byte block. If you do this, you will see the cache with the 8-byte blocks have a nearly 0% miss rate while the cache with the 16-byte blocks has nearly a 100% miss rate.) List your source code, all cache parameters used, and the resulting hit rates. Hint: You need not loop through the entire array. Instead, find two addresses that collide in the cache. Remove the inner loop and make NUM_LOOPS 1000000.
+
+#define ARRAY_SIZE 16*1024 
+#define NUM_LOOPS 1000000
+
+int main() {
+  char array[ARRAY_SIZE];
+  register int outer_loop;
+  register int inner_loop;
+  register int solution = 0;
+
+  for (outer_loop = 0; outer_loop < NUM_LOOPS; outer_loop++) {
+	  solution *= array[0];
+	  solution *= array[8191];
+  }
+  return solution;
+}
+
+Number of blocks: 8
+Number of lines: 1024
+Miss rate: 0.0008
+
+Number of blocks: 16
+Number of lines: 512
+Miss rate: 0.9985
+
+5.  Determine the optimal block size for qsort given a 1KB, 4KB, and 16KB cache. Present your results using a graph with block size on the x-axis and the miss rate on the y-axis. Please generate one graph with three lines: One each for 1KB, 4KB, and 16KB. Valid block sizes are powers of 2 from 8 to 64. Your graph should have a form similar to Figure 8.18 in Harris and Harris (2nd edition).
+
+See attached graph.

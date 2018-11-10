@@ -1,0 +1,10 @@
+#BlueJ class context
+comment0.params=dimension\ color
+comment0.target=TextArea(java.awt.Dimension,\ java.awt.Color)
+comment1.params=fontSize
+comment1.target=void\ setFontSize(int)
+comment2.params=text
+comment2.target=void\ print(java.lang.String)
+comment3.params=
+comment3.target=void\ clear()
+numComments=4

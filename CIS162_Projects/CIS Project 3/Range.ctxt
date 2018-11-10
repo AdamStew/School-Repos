@@ -1,0 +1,12 @@
+#BlueJ class context
+comment0.params=plow\ phigh
+comment0.target=Range(int,\ int)
+comment1.params=
+comment1.target=int\ getLow()
+comment2.params=
+comment2.target=int\ getHigh()
+comment3.params=value
+comment3.target=boolean\ inRange(int)
+comment4.params=
+comment4.target=double\ getAverage()
+numComments=5
